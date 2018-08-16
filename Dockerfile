@@ -1,4 +1,5 @@
 FROM node:latest 
+MAINTAINER Yuri Tceretian <yuri.t@elastic.co>
 
 ADD ./package.json package.json
 RUN npm install -g bower
@@ -17,5 +18,9 @@ ADD ./config.js config.js
 ADD ./idp-public-cert.pem idp-public-cert.pem
 ADD ./idp-private-key.pem idp-private-key.pem
 ADD ./public public
+ADD ./server.crt server.crt
+ADD ./server.key server.key
 
-ENTRYPOINT [ "node",  "app.js", "--acs", "https://foo.okta.com/auth/saml20/example", "--aud", "https://www.okta.com/saml2/service-provider/spf5aFRRXFGIMAYXQPNV" ]
+
+
+ENTRYPOINT [ "node",  "app.js", "--https", "--httpsCert", "./server.crt", "--httpsPrivateKey", "./server.key" ]
